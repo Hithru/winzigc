@@ -1,4 +1,3 @@
-package org.example;
 
 // Binary tree node to represent nodes in Abstract Syntax Tree (AST)
 public class BinaryTreeNode {

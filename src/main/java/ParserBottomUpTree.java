@@ -1,7 +1,3 @@
-package org.example;
-
-import org.example.*;
-
 import java.util.List;
 import java.util.Stack;
 

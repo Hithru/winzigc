@@ -1,4 +1,4 @@
-package org.example;
+
 
 public enum SyntaxKind {
     // for the lexer

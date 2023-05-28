@@ -1,9 +1,3 @@
-package org.example;
-
-import org.example.ASTNode;
-import org.example.Parser;
-import org.example.SyntaxToken;
-
 import java.util.List;
 
 public
