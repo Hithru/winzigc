@@ -2,58 +2,80 @@ package org.example;
 
 import java.io.*;
 
-public class Winzigc {
+/**
+ * Winzigc
+ * compile : javac winzigc.java
+ * run : java Program
+ * compile and run : javac winzigc.java; java Winzigc –ast winzig_test_programs/winzig_01
+ */
+public class winzigc {
     public static void main(String[] args) {
-        if (args.length < 2) {
-            System.out.println("java Winzigc -h");
+        if (args.length == 0) {
+            displayHelp();
             return;
         }
 
         String flag = args[0];
-        String pathToWinzigProgram = args[1];
 
         switch (flag) {
             case "-ast":
-                System.out.println("Generating AST for " + pathToWinzigProgram);
-                // Call lexer and parser
-                String programAsAString = readWinzigProgram(pathToWinzigProgram);
-                if (programAsAString == null) {
-                    return;
-                }
-                Lexer lexer = new Lexer(programAsAString);
-                // Implement lexer logic here
+                processAstCommand(args);
                 break;
             case "-codegen":
-                // Implement code generation logic here
+                processCodeGenCommand();
+                break;
+            case "-h":
+                displayHelp();
                 break;
             default:
-                System.out.println("java Winzigc -h");
+                System.out.println("Provided args are incompatible. Run with flag -h for help");
         }
     }
 
-    private static String readWinzigProgram(String path) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(path));
-            StringBuilder  stringBuilder = new StringBuilder();
-            String         ls = System.getProperty("line.separator");
-            String         line;
+    private static void processAstCommand(String[] args) {
+        if (args.length < 2) {
+            System.out.println("Path to Winzig program is missing");
+            return;
+        }
 
-            while((line = reader.readLine()) != null) {
+        String pathToWinzigProgram = args[1];
+        System.out.println("Generate AST for " + pathToWinzigProgram);
+
+        try {
+            String programAsString = readWinzigProgram(pathToWinzigProgram);
+            Lexer lexer = new Lexer(programAsString);
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading the Winzig program: " + e.getMessage());
+        }
+    }
+
+    private static void processCodeGenCommand() {
+        // Implement code generation logic here
+    }
+
+    private static void displayHelp() {
+        System.out.println("Run command: java winzigc [stage] [path]");
+        System.out.println("    [stage]: Specifies where to stop in the steps of Winzigc compiler");
+        System.out.println("            -ast: Generate 'Abstract Syntax Tree' from the Winzig program found using file path given by [path]");
+        System.out.println("     [path]: Relative path to the Winzig program");
+    }
+
+    private static String readWinzigProgram(String path) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            StringBuilder stringBuilder = new StringBuilder();
+            String lineSeparator = System.getProperty("line.separator");
+            String line;
+
+            while ((line = reader.readLine()) != null) {
                 stringBuilder.append(line);
-                stringBuilder.append(ls);
+                stringBuilder.append(lineSeparator);
             }
 
-            reader.close();
-
             return stringBuilder.toString();
-        } catch (IOException e) {
-            System.err.println("An error occurred while reading the Winzig program file: " + e.getMessage());
-            return null;
         }
     }
 }
 
-// Add implementation of SyntaxKind, SyntaxToken, Lexer classes
 enum SyntaxKind {
     //     for the lexer
     IdentifierToken(),
@@ -140,3 +162,6 @@ class Lexer{
     }
 
 }
+
+
+
