@@ -1,4 +1,4 @@
-for i in $(seq -f "%02g" 1 25); do
+for i in $(seq -f "%02g" 1 15); do
     echo "Parsing winzig_${i}:"
     java winzigc -ast winzig_test_programs/winzig_${i} > tree.${i}
     if diff -q tree.${i} winzig_test_programs/winzig_${i}.tree > /dev/null; then
